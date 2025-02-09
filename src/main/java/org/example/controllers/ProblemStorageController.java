@@ -6,6 +6,7 @@ import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -121,7 +122,8 @@ public class ProblemStorageController {
 
     private List<String> executeSolution(File tempDir, List<String> inputCsv) throws IOException {
         List<String> outputCsv = new ArrayList<>();
-        DockerClient dockerClient = DockerClientBuilder.getInstance().build();
+        DockerClient dockerClient = DockerClientBuilder.getInstance()
+                .build();
 
         try {
             for (String input : inputCsv) {

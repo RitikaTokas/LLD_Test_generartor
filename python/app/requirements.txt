@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+python-multipart
+pymongo
+docker
+python-dotenv

@@ -14,7 +14,7 @@ services:
   java-executor:
     build:
       context: .
-      dockerfile: Dockerfile.executor
+      dockerfile: Dockerfile
     container_name: java_executor
     volumes:
       - .:/app

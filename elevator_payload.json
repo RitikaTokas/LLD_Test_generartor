@@ -1,5 +1,5 @@
 {
-  "problemStatement": "Design an elevator system that can handle multiple requests efficiently.",
+  "problemStatement": "Design an elevator system using the SCAN algorithm with the nearest lift approach. The system should efficiently handle multiple requests based on lift positions and request times.",
   "idealSolution": {
     "type": "directory",
     "name": "idealSolution",
@@ -7,28 +7,29 @@
       {
         "type": "file",
         "name": "Elevator.java",
-        "content": "public class Elevator {\n  private int currentFloor;\n  public Elevator() { this.currentFloor = 0; }\n  public void moveToFloor(int floor) { this.currentFloor = floor; }\n  public int getCurrentFloor() { return currentFloor; }\n}"
+        "content": "import java.util.*;\n\npublic class Elevator {\n  private int currentFloor;\n  private boolean movingUp;\n  private PriorityQueue<Integer> requests;\n  \n  public Elevator(int startFloor) {\n    this.currentFloor = startFloor;\n    this.movingUp = true;\n    this.requests = new PriorityQueue<>();\n  }\n  \n  public void addRequest(int floor) {\n    requests.offer(floor);\n  }\n  \n  public void move() {\n    if (!requests.isEmpty()) {\n      currentFloor = requests.poll();\n    }\n  }\n  \n  public int getCurrentFloor() { return currentFloor; }\npublic void moveToFloor(int floor) {\n    requests.offer(floor);\n    move();\n}}\n"
       },
       {
         "type": "file",
         "name": "ElevatorSystem.java",
-        "content": "public class ElevatorSystem implements ProblemInterface{\n  private Elevator elevator;\n  public ElevatorSystem() { this.elevator = new Elevator(); }\n  public void processRequest(int floor) { elevator.moveToFloor(floor); }\n  public int getCurrentFloor() { return elevator.getCurrentFloor(); }\n}"
+        "content": "public class ElevatorSystem implements ProblemInterface {\n    private Elevator[] elevators;\n\n    public ElevatorSystem(int n, int m) {\n        this.elevators = new Elevator[m];\n        for (int i = 0; i < m; i++) {\n            this.elevators[i] = new Elevator(0);\n        }\n    }\n\n    public void processRequest(int sourceFloor, int destinationFloor, int requestTime) {\n        Elevator bestElevator = findBestElevator(sourceFloor);\n        bestElevator.moveToFloor(sourceFloor);\n        bestElevator.moveToFloor(destinationFloor);\n    }\n\n    private Elevator findBestElevator(int sourceFloor) {\n        // Nearest lift selection logic (SCAN Algorithm can be implemented here)\n        Elevator bestElevator = elevators[0];\n        int minDistance = Math.abs(bestElevator.getCurrentFloor() - sourceFloor);\n        for (Elevator elevator : elevators) {\n            int distance = Math.abs(elevator.getCurrentFloor() - sourceFloor);\n            if (distance < minDistance) {\n                minDistance = distance;\n                bestElevator = elevator;\n            }\n        }\n        return bestElevator;\n    }\n\n    public void printFinalState() {\n        for (int i = 0; i < elevators.length; i++) {\n  System.out.println((i + 1) +  elevators[i].getCurrentFloor());\n \n        }\n System.out.println();   }\n}\n"
       }
     ]
   },
   "driverCode": {
     "type": "directory",
     "name": "driverCode",
+    "language": "JAVA",
     "children": [
       {
         "type": "file",
         "name": "Main.java",
-        "content": "public class Main {\n  public static void main(String[] args) {\n    ElevatorSystem system = new ElevatorSystem();\n    system.processRequest(5);\n    System.out.println(system.getCurrentFloor());\n  }\n}"
+        "content": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n  Scanner scanner = new Scanner(System.in);\n\n        while (scanner.hasNext()) {\n            // Read first line of the test case\n            if (!scanner.hasNextInt()) {\n                scanner.nextLine(); // Skip empty lines\n                continue;\n            }\n\n            int n = scanner.nextInt(); // Number of floors\n            int m = scanner.nextInt(); // Number of lifts\n            int r = scanner.nextInt(); // Number of requests\n            scanner.nextLine(); // Move to the next line\n\n            ElevatorSystem system = new ElevatorSystem(n, m);\n\n            // Read r requests\n            for (int i = 0; i < r; i++) {\n                int source = scanner.nextInt();\n                int destination = scanner.nextInt();\n                int requestTime = scanner.nextInt();\n                scanner.nextLine(); // Move to the next line\n\n                system.processRequest(source, destination, requestTime);\n            }\n\n            // Print the final state of the elevator system\n            system.printFinalState();\n\n            // Print an empty line to separate test cases\n     \n        }\n\n        scanner.close();\n   }\n}\n"
       },
       {
         "type": "file",
         "name": "ProblemInterface.java",
-        "content": "public interface ProblemInterface {\n  void processRequest(int floor);\n  int getCurrentFloor();\n}"
+        "content": "public interface ProblemInterface {\n    void processRequest(int sourceFloor, int destinationFloor, int requestTime);\n    void printFinalState();\n}\n"
       }
     ]
   }
