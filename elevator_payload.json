@@ -1,0 +1,35 @@
+{
+  "problemStatement": "Design an elevator system that can handle multiple requests efficiently.",
+  "idealSolution": {
+    "type": "directory",
+    "name": "idealSolution",
+    "children": [
+      {
+        "type": "file",
+        "name": "Elevator.java",
+        "content": "public class Elevator {\n  private int currentFloor;\n  public Elevator() { this.currentFloor = 0; }\n  public void moveToFloor(int floor) { this.currentFloor = floor; }\n  public int getCurrentFloor() { return currentFloor; }\n}"
+      },
+      {
+        "type": "file",
+        "name": "ElevatorSystem.java",
+        "content": "public class ElevatorSystem implements ProblemInterface{\n  private Elevator elevator;\n  public ElevatorSystem() { this.elevator = new Elevator(); }\n  public void processRequest(int floor) { elevator.moveToFloor(floor); }\n  public int getCurrentFloor() { return elevator.getCurrentFloor(); }\n}"
+      }
+    ]
+  },
+  "driverCode": {
+    "type": "directory",
+    "name": "driverCode",
+    "children": [
+      {
+        "type": "file",
+        "name": "Main.java",
+        "content": "public class Main {\n  public static void main(String[] args) {\n    ElevatorSystem system = new ElevatorSystem();\n    system.processRequest(5);\n    System.out.println(system.getCurrentFloor());\n  }\n}"
+      },
+      {
+        "type": "file",
+        "name": "ProblemInterface.java",
+        "content": "public interface ProblemInterface {\n  void processRequest(int floor);\n  int getCurrentFloor();\n}"
+      }
+    ]
+  }
+}
