@@ -8,7 +8,7 @@ public class Main {
     try {
       // Read input from test_input.txt
       BufferedReader inputReader = new BufferedReader(new FileReader("test_input.txt"));
-      System.out.println("file read");
+      System.out.println("File read successfully.");
       List<String> inputLines = new ArrayList<>();
       String line;
       while ((line = inputReader.readLine()) != null) {
@@ -19,6 +19,7 @@ public class Main {
       // Redirect System.out to capture the output
       ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
       PrintStream printStream = new PrintStream(outputStream);
+      PrintStream originalOut = System.out; // Save the original System.out
       System.setOut(printStream);
 
       // Simulate user input
@@ -27,7 +28,6 @@ public class Main {
       // Input player names
       String playerXName = scanner.nextLine().split(" ")[1];
       String playerOName = scanner.nextLine().split(" ")[1];
-      System.out.println(playerXName);
 
       // Initialize the game
       Game game = new Game(playerXName, playerOName);
@@ -75,6 +75,9 @@ public class Main {
 
       // Capture the actual output
       String actualOutput = outputStream.toString().trim();
+
+      // Restore the original System.out
+      System.setOut(originalOut);
 
       // Read expected output from expected_output.txt
       BufferedReader expectedReader = new BufferedReader(new FileReader("expected_output.txt"));
