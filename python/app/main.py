@@ -196,7 +196,7 @@ async def store_problem(
 
         # Stop and remove the container
         container.stop()
-
+        container.remove()
 
         # Splitting outputs based on empty lines separating test cases
         output_cases = []
