@@ -14,6 +14,10 @@ public class Game {
     }
 
     public boolean makeMove(int row, int col) {
+        if (row < 1 || row > Board.SIZE || col < 1 || col > Board.SIZE) {
+            System.out.println("Invalid Move");
+            return false;
+        }
         if (board.isCellEmpty(row, col)) {
             board.placePiece(row, col, currentPlayer.getPiece());
             switchPlayer();

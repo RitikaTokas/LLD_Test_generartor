@@ -1,7 +1,7 @@
 package org.example;
 
 public class Board {
-    private static final int SIZE = 3;
+    static final int SIZE = 3;
     private final char[][] grid;
 
     public Board() {
