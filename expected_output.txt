@@ -28,13 +28,15 @@ O X X
 Bob won the game
 Game Over
 
-X - -
-- - -
-- - -
+X - - -
+- - - -
+- - - -
+- - - -
 Invalid Move
-X - -
-- O -
-- - -
+X - - -
+- O - -
+- - - -
+- - - -
 Game Over
 
 Invalid Move

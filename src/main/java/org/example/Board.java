@@ -1,20 +1,25 @@
 package org.example;
 
 public class Board {
-    static final int SIZE = 3;
+    private final int size;
     private final char[][] grid;
 
-    public Board() {
-        grid = new char[SIZE][SIZE];
+    public Board(int size) {
+        this.size = size;
+        this.grid = new char[size][size];
         initializeBoard();
     }
 
     private void initializeBoard() {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 grid[i][j] = '-';
             }
         }
+    }
+
+    public int getSize() {
+        return size;
     }
 
     public boolean isCellEmpty(int row, int col) {
@@ -26,27 +31,38 @@ public class Board {
     }
 
     public boolean checkWin() {
-        // Check rows, columns, and diagonals for a win
-        for (int i = 0; i < SIZE; i++) {
-            if (grid[i][0] != '-' && grid[i][0] == grid[i][1] && grid[i][1] == grid[i][2]) {
-                return true; // Row win
+        // Check rows and columns
+        for (int i = 0; i < size; i++) {
+            boolean rowWin = true;
+            boolean colWin = true;
+            char firstRow = grid[i][0];
+            char firstCol = grid[0][i];
+            if (firstRow == '-') rowWin = false;
+            if (firstCol == '-') colWin = false;
+            for (int j = 1; j < size; j++) {
+                if (grid[i][j] != firstRow) rowWin = false;
+                if (grid[j][i] != firstCol) colWin = false;
             }
-            if (grid[0][i] != '-' && grid[0][i] == grid[1][i] && grid[1][i] == grid[2][i]) {
-                return true; // Column win
-            }
+            if (rowWin || colWin) return true;
         }
-        if (grid[0][0] != '-' && grid[0][0] == grid[1][1] && grid[1][1] == grid[2][2]) {
-            return true; // Diagonal win
+
+        // Check diagonals
+        boolean diag1Win = true;
+        boolean diag2Win = true;
+        char firstDiag1 = grid[0][0];
+        char firstDiag2 = grid[0][size - 1];
+        if (firstDiag1 == '-') diag1Win = false;
+        if (firstDiag2 == '-') diag2Win = false;
+        for (int i = 1; i < size; i++) {
+            if (grid[i][i] != firstDiag1) diag1Win = false;
+            if (grid[i][size - 1 - i] != firstDiag2) diag2Win = false;
         }
-        if (grid[0][2] != '-' && grid[0][2] == grid[1][1] && grid[1][1] == grid[2][0]) {
-            return true; // Anti-diagonal win
-        }
-        return false;
+        return diag1Win || diag2Win;
     }
 
     public boolean isFull() {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 if (grid[i][j] == '-') {
                     return false;
                 }
@@ -56,15 +72,14 @@ public class Board {
     }
 
     public void print() {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                // Print each cell separated by a space but without a space at the end of the line
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 System.out.print(grid[i][j]);
-                if (j < SIZE - 1) {
+                if (j < size - 1) {
                     System.out.print(" ");
                 }
             }
-            System.out.println(); // move to the next line after printing all cells in a row
+            System.out.println();
         }
     }
 }

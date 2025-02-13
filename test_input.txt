@@ -1,5 +1,7 @@
-X Alice
-O Bob
+3
+2
+Alice
+Bob
 1 1
 1 2
 2 2
@@ -11,18 +13,25 @@ O Bob
 3 3
 exit
 
-X David
-O Eva
+4
+3
+David
+Eva
+Frank
 1 1
 1 1
 2 2
 exit
 
-X Luke
-O Mark
+5
+2
+Luke
+Mark
 4 5
 exit
 
-X John
-O Doe
+3
+2
+John
+Doe
 exit

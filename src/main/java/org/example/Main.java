@@ -14,6 +14,17 @@ public class Main {
 
       int testCaseNum = 1;
       while (inputIterator.hasNext()) {
+        // Read board size and number of players
+        int boardSize = Integer.parseInt(inputIterator.next().trim());
+        int numPlayers = Integer.parseInt(inputIterator.next().trim());
+
+        // Read player names
+        List<String> playerNames = new ArrayList<>();
+        for (int i = 0; i < numPlayers; i++) {
+          playerNames.add(inputIterator.next().trim());
+        }
+
+        // Read moves
         List<String> testCaseInput = new ArrayList<>();
         String line;
         while (inputIterator.hasNext() && !(line = inputIterator.next()).isEmpty()) {
@@ -25,7 +36,7 @@ public class Main {
         PrintStream originalOut = System.out;
         System.setOut(printStream);
 
-        simulateTestCase(testCaseInput);
+        simulateTestCase(boardSize, numPlayers, playerNames, testCaseInput);
 
         System.setOut(originalOut);
 
@@ -55,11 +66,9 @@ public class Main {
     }
   }
 
-  private static void simulateTestCase(List<String> inputLines) {
+  private static void simulateTestCase(int boardSize, int numPlayers, List<String> playerNames, List<String> inputLines) {
     Scanner scanner = new Scanner(String.join("\n", inputLines));
-    String playerXName = scanner.nextLine().trim().split(" ")[1];
-    String playerOName = scanner.nextLine().trim().split(" ")[1];
-    Game game = new Game(playerXName, playerOName);
+    Game game = new Game(boardSize, playerNames);
 
     boolean everMoved = false;        // Track if any move has been made
     boolean printedAfterMove = false; // Ensure board prints only immediately after a valid move
