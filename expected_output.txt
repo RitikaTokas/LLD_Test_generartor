@@ -39,8 +39,11 @@ X - - -
 - - - -
 Game Over
 
-Invalid Move
-Invalid Move
+- - - - -
+- - - - -
+- - - - -
+- - - - X
+- - - - -
 Game Over
 
 Game Over
