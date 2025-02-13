@@ -19,7 +19,7 @@ public class Game {
     }
 
     public boolean makeMove(int row, int col) {
-        if (row <= 0 || row > board.getSize() || col <= 0 || col > board.getSize()) {
+        if (row < 0 || row >= board.getSize() || col < 0 || col >= board.getSize()) {
             System.out.println("Invalid Move");
             return false;
         }

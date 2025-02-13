@@ -39,7 +39,7 @@ public class Board {
             char firstCol = grid[0][i];
             if (firstRow == '-') rowWin = false;
             if (firstCol == '-') colWin = false;
-            for (int j = 1; j < size && (rowWin || colWin); j++) {
+            for (int j = 1; j < size; j++) {
                 if (grid[i][j] != firstRow) rowWin = false;
                 if (grid[j][i] != firstCol) colWin = false;
             }
@@ -53,7 +53,7 @@ public class Board {
         char firstDiag2 = grid[0][size - 1];
         if (firstDiag1 == '-') diag1Win = false;
         if (firstDiag2 == '-') diag2Win = false;
-        for (int i = 1; i < size && (diag1Win || diag2Win); i++) {
+        for (int i = 1; i < size; i++) {
             if (grid[i][i] != firstDiag1) diag1Win = false;
             if (grid[i][size - 1 - i] != firstDiag2) diag2Win = false;
         }
