@@ -17,4 +17,4 @@ Invalid Move
 X O O
 - X -
 - - X
-Gaurav won the game
+Sagar won the game

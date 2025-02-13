@@ -58,9 +58,13 @@ public class Board {
     public void print() {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                System.out.print(grid[i][j] + " ");
+                // Print each cell separated by a space but without a space at the end of the line
+                System.out.print(grid[i][j]);
+                if (j < SIZE - 1) {
+                    System.out.print(" ");
+                }
             }
-            System.out.println();
+            System.out.println(); // move to the next line after printing all cells in a row
         }
     }
 }

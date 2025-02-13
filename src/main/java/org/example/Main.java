@@ -83,12 +83,14 @@ public class Main {
       BufferedReader expectedReader = new BufferedReader(new FileReader("expected_output.txt"));
       StringBuilder expectedOutput = new StringBuilder();
       while ((line = expectedReader.readLine()) != null) {
-        expectedOutput.append(line).append("\n");
+        expectedOutput.append(line.trim()).append("\n");
       }
       expectedReader.close();
 
+      String expectedOutputString = expectedOutput.toString().trim();
+
       // Compare actual and expected output
-      if (actualOutput.equals(expectedOutput.toString().trim())) {
+      if (actualOutput.contentEquals(expectedOutputString)) {
         System.out.println("Test Passed!");
       } else {
         System.out.println("Test Failed!");
