@@ -1,68 +1,70 @@
 import requests
 import base64
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+class UploadFileRequest(BaseModel):
+    code: str
+    repo_name: str
+    branch: str = "main"
+    file_path: str
+    file_content: str
 
 app = FastAPI()
 
-# GitHub OAuth Credentials (replace with actual values)
-CLIENT_ID = "your_github_client_id"
-CLIENT_SECRET = "your_github_client_secret"
+CLIENT_ID = "Ov23lik7pTkdZwv1nLLn"
+CLIENT_SECRET = "10662dd19ba483434b09da8a9fd8e755d95ad32d"
 
-# GitHub API URLs
 TOKEN_URL = "https://github.com/login/oauth/access_token"
 REPO_URL = "https://api.github.com/user/repos"
 
 @app.post("/github/upload-file/")
-def upload_file(
-        code: str = Query(...),
-        repo_name: str = Query(...),
-        branch: str = Query("main"),
-        file_path: str = Query(...),
-        file_content: str = Query(...)
-):
-    """
-    Single API call to:
-    1. Exchange the GitHub OAuth code for an access token.
-    2. Create a repository if it does not exist.
-    3. Upload a file to the repository on the given branch.
-    """
-
-    # Step 1: Get Access Token
+def upload_file(request: UploadFileRequest):
     headers = {"Accept": "application/json"}
     token_data = {
         "client_id": CLIENT_ID,
         "client_secret": CLIENT_SECRET,
-        "code": code,
+        "code": request.code,
     }
 
     response = requests.post(TOKEN_URL, headers=headers, data=token_data)
     if response.status_code != 200:
         raise HTTPException(status_code=400, detail="Failed to retrieve access token")
 
-    access_token = response.json().get("access_token")
+    token_response = response.json()
+    print("token_response:", token_response)
+    access_token = token_response.get("access_token")
     if not access_token:
         raise HTTPException(status_code=400, detail="Access token not found")
 
     headers["Authorization"] = f"Bearer {access_token}"
 
-    # Step 2: Check if Repository Exists, Else Create It
-    repo_url = f"https://api.github.com/repos/{{repo_name}}"
+    user_response = requests.get("https://api.github.com/user", headers=headers)
+    if user_response.status_code != 200:
+        raise HTTPException(status_code=400, detail="Failed to retrieve user info")
+
+    username = user_response.json().get("login")
+    if not username:
+        raise HTTPException(status_code=400, detail="Failed to retrieve username")
+
+    # Check if the repo exists.
+    repo_url = f"https://api.github.com/repos/{username}/{request.repo_name}"
     repo_check = requests.get(repo_url, headers=headers)
 
-    if repo_check.status_code == 404:  # Repo doesn't exist, create it
-        create_repo_data = {"name": repo_name, "private": False}
+    # If the repo does not exist, create it.
+    if repo_check.status_code == 404:
+        create_repo_data = {"name": request.repo_name, "private": False}
         create_repo = requests.post(REPO_URL, headers=headers, json=create_repo_data)
         if create_repo.status_code != 201:
             raise HTTPException(status_code=400, detail="Failed to create repository")
 
-    # Step 3: Upload File to Repository
-    encoded_content = base64.b64encode(file_content.encode()).decode()
-    file_url = f"https://api.github.com/repos/{repo_name}/contents/{file_path}"
+    encoded_content = base64.b64encode(request.file_content.encode()).decode()
+    file_url = f"https://api.github.com/repos/{username}/{request.repo_name}/contents/{request.file_path}"
 
     file_data = {
         "message": "Uploading file via API",
         "content": encoded_content,
-        "branch": branch,
+        "branch": request.branch,
     }
 
     file_response = requests.put(file_url, headers=headers, json=file_data)
