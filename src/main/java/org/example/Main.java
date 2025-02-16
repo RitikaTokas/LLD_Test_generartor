@@ -41,25 +41,26 @@ public class Main {
         System.setOut(originalOut);
 
         String actualOutput = outputStream.toString().trim();
-        StringBuilder expectedOutput = new StringBuilder();
-        while (expectedIterator.hasNext() && !(line = expectedIterator.next()).isEmpty()) {
-          expectedOutput.append(line).append("\n");
-        }
 
-        if (actualOutput.equals(expectedOutput.toString().trim())) {
-          System.out.println("Test Case " + testCaseNum + " Passed!");
-        } else {
-          System.out.println("Test Case " + testCaseNum + " Failed!");
+        // Use the OutputComparator for comparing the output
+        boolean result = OutputComparator.compareOutputs(testCaseNum, actualOutput, expectedIterator);
+
+        if (!result) {
+          System.out.println("Test Case Failed");
           System.out.println("Actual Output:");
           System.out.println(actualOutput);
           System.out.println("Expected Output:");
-          System.out.println(expectedOutput.toString().trim());
+          System.out.println(expectedIterator.next());
+          break;
         }
 
         testCaseNum++;
         if (inputIterator.hasNext()) {
           System.out.println();
         }
+      }
+      if (!inputIterator.hasNext()) {
+        System.out.println("All test cases passed");
       }
     } catch (IOException e) {
       e.printStackTrace();
