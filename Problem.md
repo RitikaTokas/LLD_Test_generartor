@@ -123,6 +123,7 @@ Bob
 1 2
 2 2
 3 1
+3 3
 ```
 
 #### **Output:**
@@ -140,6 +141,17 @@ X O -
 X O -
 - X -
 - - -
+
+X O -
+- X -
+O - -
+
+X O -
+- X -
+O - X
+
+Alice won the game
+Game Over
 ```
 
 #### **Explanation:**
